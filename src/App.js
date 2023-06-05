@@ -2,14 +2,14 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Home from './components/Home';
-import Meals from './components/Meals';
-import Drinks from './components/Drinks';
-import MealDetails from './components/MealDetails';
-import DrinkDetails from './components/DrinkDetails';
-import Profile from './components/Profile';
-import DoneRecipes from './components/DoneRecipes';
-import FavoriteRecipes from './components/FavoriteRecipes';
+import Home from './pages/Home';
+import Meals from './pages/Meals';
+import Drinks from './pages/Drinks';
+import MealDetails from './pages/MealDetails';
+import DrinkDetails from './pages/DrinkDetails';
+import Profile from './pages/Profile';
+import DoneRecipes from './pages/DoneRecipes';
+import FavoriteRecipes from './pages/FavoriteRecipes';
 
 function App() {
   return (
