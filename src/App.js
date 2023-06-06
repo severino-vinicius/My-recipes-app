@@ -15,8 +15,8 @@ import Login from './pages/Login';
 
 function App() {
   return (
-    <RecipesProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <RecipesProvider>
         <Switch>
           {/* <Route exact path="/" component={ Home } /> */}
           <Route exact path="/" component={ Login } />
@@ -34,8 +34,8 @@ function App() {
           <Route exact path="/done-recipes" component={ DoneRecipes } />
           <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
         </Switch>
-      </BrowserRouter>
-    </RecipesProvider>
+      </RecipesProvider>
+    </BrowserRouter>
   );
 }
 

@@ -1,21 +1,29 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import RecipesContext from './recipesContext';
 import { fetchDrinks, fetchMeals } from '../services/fetchApi';
 
 function RecipesProvider({ children }) {
   const [recipes, setRecipes] = useState([]);
+  const history = useHistory();
 
   const fetch = useCallback(async (type, url) => {
     if (type === 'meals') {
       const dataApi = await fetchMeals(url);
+      if (dataApi?.length === 1) {
+        history.push(`/meals/${dataApi[0].idMeal}`);
+      }
       setRecipes(dataApi);
     } else {
       const dataApi = await fetchDrinks(url);
+      if (dataApi?.length === 1) {
+        history.push(`/drinks/${dataApi[0].idDrink}`);
+      }
       setRecipes(dataApi);
-      console.log(recipes);
     }
-  }, [recipes]);
+    console.log(recipes);
+  }, [recipes, history]);
 
   const fetchMealRecipes = useCallback(async (searchType, searchParam) => {
     switch (searchType) {
