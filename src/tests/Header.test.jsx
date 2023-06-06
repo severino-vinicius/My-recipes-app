@@ -26,7 +26,7 @@ describe('Quando renderizando o componente header', () => {
     const titleElement = await screen.findByTestId('page-title');
     expect(titleElement).toHaveTextContent(pageTitle);
   });
-
+  // each
   it.each`
   showIcon | showSearch
   ${true}  | ${true}   
