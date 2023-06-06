@@ -5,8 +5,21 @@ import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
 import Header from '../components/Header';
 import MealIcon from '../images/mealIcon.svg';
+import RecipesProvider from '../context/recipesProvider';
+import meals from './mocks/meals';
 
 describe('Quando renderizando o componente header', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: jest.fn().mockResolvedValue(meals),
+    });
+    global.alert = jest.fn();
+  });
+
+  afterEach(() => {
+    global.fetch.mockRestore();
+  });
+
   it('Renderiza o titulo de acordo com o parametro title', async () => {
     const pageTitle = 'Meals';
     render(<Header pageTitle={ pageTitle } />);
@@ -50,9 +63,11 @@ describe('Quando renderizando o componente header', () => {
     const history = createMemoryHistory();
 
     render(
-      <Router history={ history }>
-        <Header showIcon showSearch pageIcon={ MealIcon } />
-      </Router>,
+      <RecipesProvider>
+        <Router history={ history }>
+          <Header showIcon showSearch pageIcon={ MealIcon } />
+        </Router>
+      </RecipesProvider>,
     );
 
     expect(screen.queryByTestId('search-input')).not.toBeInTheDocument();

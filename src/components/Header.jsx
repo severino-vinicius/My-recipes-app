@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import SearchIcon from '../images/searchIcon.svg';
 import ProfileIcon from '../images/profileIcon.svg';
+import SearchBar from './SearchBar';
 
-export default function Header({ pageTitle, showSearch, showIcon, pageIcon }) {
+export default function Header({ pageTitle, showSearch, showIcon, pageIcon, pageType }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
@@ -36,11 +37,7 @@ export default function Header({ pageTitle, showSearch, showIcon, pageIcon }) {
       </div>
       <div>
         {isSearchOpen ? (
-          <input
-            type="text"
-            placeholder="Search"
-            data-testid="search-input"
-          />
+          <SearchBar pageType={ pageType } />
         ) : null}
       </div>
     </>
@@ -52,4 +49,5 @@ Header.propTypes = {
   showSearch: PropTypes.bool,
   showIcon: PropTypes.bool,
   pageIcon: PropTypes.shape({}),
+  pageType: PropTypes.string,
 }.isRequired;
