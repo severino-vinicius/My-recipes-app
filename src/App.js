@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Home from './pages/Home';
+// import Home from './pages/Home';
 import Meals from './pages/Meals';
 import Drinks from './pages/Drinks';
 import MealDetails from './pages/MealDetails';
@@ -11,13 +11,15 @@ import Profile from './pages/Profile';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import RecipesProvider from './context/recipesProvider';
+import Login from './pages/Login';
 
 function App() {
   return (
     <RecipesProvider>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" component={ Home } />
+          {/* <Route exact path="/" component={ Home } /> */}
+          <Route exact path="/" component={ Login } />
           <Route exact path="/meals" component={ Meals } />
           <Route exact path="/drinks" component={ Drinks } />
           <Route exact path="/meals/:id" component={ MealDetails } />
