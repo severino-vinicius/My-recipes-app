@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
 import DrinkIcon from '../images/drinkIcon.svg';
+import Footer from '../components/Footer';
 
 export default function Drinks() {
   return (
@@ -13,6 +14,7 @@ export default function Drinks() {
         pageType="drinks"
       />
       <div>Drinks</div>
+      <Footer />
     </>
   );
 }
