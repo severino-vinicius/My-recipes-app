@@ -20,7 +20,7 @@ export default function Drinks() {
         pageType="drinks"
       />
       <div>Drinks</div>
-      {recipes.map((recipe, index) => {
+      {recipes?.map((recipe, index) => {
         if (index >= MAX_DRINKS_ON_PAGE) {
           return null;
         }

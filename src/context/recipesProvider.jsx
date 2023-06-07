@@ -13,17 +13,20 @@ function RecipesProvider({ children }) {
       const dataApi = await fetchMeals(url);
       if (dataApi?.length === 1) {
         history.push(`/meals/${dataApi[0].idMeal}`);
+      } else if (!dataApi?.length) {
+        global.alert('Sorry, we haven\'t found any recipes for these filters.');
       }
       setRecipes(dataApi);
     } else {
       const dataApi = await fetchDrinks(url);
       if (dataApi?.length === 1) {
         history.push(`/drinks/${dataApi[0].idDrink}`);
+      } else if (!dataApi?.length) {
+        global.alert('Sorry, we haven\'t found any recipes for these filters.');
       }
       setRecipes(dataApi);
     }
-    console.log(recipes);
-  }, [recipes, history]);
+  }, [setRecipes, history]);
 
   const fetchMealRecipes = useCallback(async (searchType, searchParam) => {
     switch (searchType) {

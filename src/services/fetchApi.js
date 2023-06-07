@@ -1,11 +1,19 @@
 export const fetchDrinks = async (url) => {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data.drinks;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.drinks;
+  } catch {
+    return [];
+  }
 };
 
 export const fetchMeals = async (url) => {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data.meals;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.meals;
+  } catch {
+    return [];
+  }
 };

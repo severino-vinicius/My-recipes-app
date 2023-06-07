@@ -54,12 +54,14 @@ describe('Quando renderizando o componente searchBar para meals', () => {
     );
 
     const radioIngredient = screen.queryByTestId(INGREDIENT_SEARCH_RADIO_ID);
+    const radioName = screen.queryByTestId(NAME_SEARCH_RADIO_ID);
     const input = screen.queryByTestId(SEARCH_INPUT_ID);
     const button = screen.queryByTestId(SEARCH_BUTTON_ID);
 
     const param = 'chicken';
     const urlPrefix = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=';
 
+    userEvent.click(radioName);
     userEvent.click(radioIngredient);
     userEvent.type(input, param);
     userEvent.click(button);
@@ -237,9 +239,7 @@ describe('Quando renderizando o componente searchBar para drinks', () => {
     const radio = screen.queryByTestId(FIRST_LETTER_SEARCH_RADIO_ID);
     const input = screen.queryByTestId(SEARCH_INPUT_ID);
     const button = screen.queryByTestId(SEARCH_BUTTON_ID);
-
     const param = 'abc';
-
     userEvent.click(radio);
     userEvent.type(input, param);
     userEvent.click(button);
