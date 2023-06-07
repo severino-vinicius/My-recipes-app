@@ -1,0 +1,11 @@
+.mealCard {
+  max-width: 160px;
+  max-height: 140px;
+  display: inline-block; 
+  margin-right: 10px; 
+}
+
+.mealCard img {
+  max-width: 160px;
+  max-height: 140px;
+}

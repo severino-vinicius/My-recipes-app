@@ -88,7 +88,8 @@ function RecipesProvider({ children }) {
   const context = useMemo(() => ({
     fetchMealRecipes,
     fetchDrinkRecipes,
-  }), [fetchMealRecipes, fetchDrinkRecipes]);
+    recipes,
+  }), [fetchMealRecipes, fetchDrinkRecipes, recipes]);
 
   return (
     <RecipesContext.Provider value={ context }>

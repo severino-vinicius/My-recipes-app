@@ -1,0 +1,11 @@
+.drinkCard {
+  max-width: 160px;
+  max-height: 140px;
+  display: inline-block; 
+  margin-right: 10px; 
+}
+
+.drinkCard img {
+  max-width: 160px;
+  max-height: 140px;
+}
