@@ -4,6 +4,7 @@ import MealIcon from '../images/mealIcon.svg';
 import RecipesContext from '../context/recipesContext';
 import './Meals.css';
 import Footer from '../components/Footer';
+import Recipes from './Recipes';
 
 const MAX_DRINKS_ON_PAGE = 12;
 
@@ -20,7 +21,7 @@ export default function Meals() {
         pageType="meals"
       />
       <div>Meals Page</div>
-      {recipes?.map((recipe, index) => {
+      {/* {recipes?.map((recipe, index) => {
         if (index >= MAX_DRINKS_ON_PAGE) {
           return null;
         }
@@ -35,7 +36,8 @@ export default function Meals() {
             <p data-testid={ `${index}-card-name` }>{recipe.strMeal}</p>
           </div>
         );
-      })}
+      })} */}
+      <Recipes />
       <Footer />
     </>
   );
