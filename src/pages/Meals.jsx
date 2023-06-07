@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import MealIcon from '../images/mealIcon.svg';
 import RecipesContext from '../context/recipesContext';
 import './Meals.css';
+import Footer from '../components/Footer';
 
 const MAX_DRINKS_ON_PAGE = 12;
 
@@ -35,6 +36,7 @@ export default function Meals() {
           </div>
         );
       })}
+      <Footer />
     </>
   );
 }
