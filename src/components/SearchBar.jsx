@@ -3,6 +3,9 @@ import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import RecipesContext from '../context/recipesContext';
 
+// compomente contendo 1 input de texto 1 radio com 3 opçoes e 1 botao
+// filter text armazena o valor do inṕut de texto
+// search option armazena o valor do radio selecionado
 export default function SearchBar({ pageType }) {
   const [filterText, setFilterText] = useState('');
   const [searchOption, setSearchOption] = useState('ingredient');
@@ -11,7 +14,7 @@ export default function SearchBar({ pageType }) {
     fetchDrinkRecipes,
   } = useContext(RecipesContext);
 
-  // funcao para o botao search
+  // chama a funcao quando o usuario clica no botao e chama ou a funcao fetch drinks ou a funcao fecthmeals
   const handleSearch = async () => {
     if (pageType === 'drinks') {
       await fetchDrinkRecipes(searchOption, filterText);

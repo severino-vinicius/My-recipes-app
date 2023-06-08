@@ -8,6 +8,7 @@ function RecipesProvider({ children }) {
   const [recipes, setRecipes] = useState([]);
   const history = useHistory();
 
+  // funcao responsavel por chamar o service e salvar o resultado no state recipes
   const fetch = useCallback(async (type, url) => {
     if (type === 'meals') {
       const dataApi = await fetchMeals(url);
@@ -16,6 +17,7 @@ function RecipesProvider({ children }) {
       } else if (!dataApi?.length) {
         global.alert('Sorry, we haven\'t found any recipes for these filters.');
       }
+      // atualiza o estado
       setRecipes(dataApi);
     } else {
       const dataApi = await fetchDrinks(url);
@@ -28,9 +30,12 @@ function RecipesProvider({ children }) {
     }
   }, [setRecipes, history]);
 
+  // funcao que e chamada pelo botao do componente SearchBar(pode ser a fetchMeals OU fetchDrink)
+  // dependendo do radio que o usuario selecionou vai cair um case diferente (cada um tem sua URL)
   const fetchMealRecipes = useCallback(async (searchType, searchParam) => {
     switch (searchType) {
     case 'ingredient':
+      // temos outra funcao sendo chamada aqui (fetch- em cima na pagina)
       await fetch(
         'meals',
         `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchParam}`,
