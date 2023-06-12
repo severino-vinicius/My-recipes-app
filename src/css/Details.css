@@ -1,0 +1,29 @@
+.RecomendedCard {
+  border: solid black 1px;
+  display: flex;
+  gap: 10px;
+  height: 300px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  width: 360px;
+}
+
+.imgRecipeDetail {
+  max-height: 260px;
+  max-width: 300px;
+}
+
+.imgRecomendCard {
+  flex-shrink: 0;
+  height: 100%;
+  max-height: 200px;
+  max-width: 180px;
+  white-space: nowrap;
+}
+
+.btnStartRecipe {
+  bottom: 0;
+  left: 25%;
+  position: fixed;
+}
