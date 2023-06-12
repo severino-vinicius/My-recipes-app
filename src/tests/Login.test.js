@@ -24,5 +24,9 @@ describe('Test login page', () => {
     userEvent.type(password, '1231231');
 
     expect(btn).not.toBeDisabled();
+
+    userEvent.click(btn);
+
+    // expect(history.location.pathname).toBe('/meals');
   });
 });
