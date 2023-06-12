@@ -4,6 +4,7 @@ import { fetchMealsDetails,
   fetchDrinksDetails,
   fetchDrinks,
   fetchMeals } from '../services/fetchApi';
+import BtnStartRecipe from './BtnStartRecipe';
 import '../css/Details.css';
 
 function RecipeDetails() {
@@ -12,6 +13,7 @@ function RecipeDetails() {
   const [responseDrinksApi, setResponseDrinksApi] = useState('');
   const [recomendedDrinks, setRecomendedDrinks] = useState('');
   const [recomendedMeals, setRecomendedMeals] = useState('');
+  const [doneRecipe, setDoneRecipe] = useState('');
   const history = useHistory();
 
   // Função que chama a Api de acordo com qual path ela se encontra e depois salva no estado local
@@ -31,9 +33,16 @@ function RecipeDetails() {
     setRecomendedMeals(recomendedMealsApi);
   };
 
+  // Verifica o LocalStorage e o define como um estado local
+  const getLocalStorage = () => {
+    const dataLS = JSON.parse(localStorage.getItem('doneRecipes'));
+    setDoneRecipe(dataLS);
+  };
+
   // Inicia o componente chamando a função q dispara a chamada da API
   useEffect(() => {
     getDetailsData();
+    getLocalStorage();
   }, []);
 
   // Função que faz uma contagem ate 20 para renderizar todos os ingredientes
@@ -54,6 +63,7 @@ function RecipeDetails() {
     return ingredients;
   };
 
+  // Função que substitui o trecho, 'watch?v=' por 'embed/' no link do youtube que retorna da API
   const embedVideo = (linkToEmbed) => {
     const videoUrl = linkToEmbed.replace('watch?v=', 'embed/');
     return videoUrl;
@@ -65,6 +75,7 @@ function RecipeDetails() {
     return index < maxCard && element;
   };
 
+  // Renderização condicional, se possuir alguma coisa no estado responseMealApi rendeiza o map dos Meals
   if (responseMealApi.length > 0) {
     return (
       <div>
@@ -109,6 +120,9 @@ function RecipeDetails() {
         }
         <div className="RecomendedCard">
           {
+            // Caso esteja na renderização de Details Meals vai chamar a API de Drinks
+            // para assim renderizar 6 itens como recomendados
+
             recomendedDrinks.filter(filterRecomendedCard).map((recipe, index) => (
               <div
                 key={ recipe.idDrink }
@@ -126,9 +140,13 @@ function RecipeDetails() {
             ))
           }
         </div>
+        { !doneRecipe && <BtnStartRecipe />}
       </div>
     );
   }
+
+  // Renderização condicional, se possuir alguma coisa no estado responseDrinksApi rendeiza o map dos Drinks
+
   if (responseDrinksApi.length > 0) {
     return (
       <div>
@@ -158,6 +176,9 @@ function RecipeDetails() {
         }
         <div className="RecomendedCard">
           {
+            // Caso esteja na renderização de Details drinks vai chamar a API de meals
+            // para assim renderizar 6 itens como recomendados
+
             recomendedMeals.filter(filterRecomendedCard).map((recipe, index) => (
               <div
                 key={ recipe.idMeal }
@@ -173,6 +194,7 @@ function RecipeDetails() {
             ))
           }
         </div>
+        { !doneRecipe && <BtnStartRecipe />}
       </div>
     );
   }
