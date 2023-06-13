@@ -1,14 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Header from '../components/Header';
 import MealIcon from '../images/mealIcon.svg';
-import RecipesContext from '../context/recipesContext';
+// import RecipesContext from '../context/recipesContext';
 import './Meals.css';
 import Footer from '../components/Footer';
-
-const MAX_DRINKS_ON_PAGE = 12;
+import Recipes from './Recipes';
 
 export default function Meals() {
-  const { recipes } = useContext(RecipesContext);
+  // const { recipes } = useContext(RecipesContext);
 
   return (
     <>
@@ -20,7 +19,7 @@ export default function Meals() {
         pageType="meals"
       />
       <div>Meals Page</div>
-      {recipes?.map((recipe, index) => {
+      {/* {recipes?.map((recipe, index) => {
         if (index >= MAX_DRINKS_ON_PAGE) {
           return null;
         }
@@ -35,7 +34,8 @@ export default function Meals() {
             <p data-testid={ `${index}-card-name` }>{recipe.strMeal}</p>
           </div>
         );
-      })}
+      })} */}
+      <Recipes />
       <Footer />
     </>
   );

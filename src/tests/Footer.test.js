@@ -1,12 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryHistory } from 'history';
-import { Router } from 'react-router-dom';
 import App from '../App';
+import renderWithRouterAndContext from './helpers/RenderWithRouter';
 
 describe('Componente Footer', () => {
   it('Existem os ícones de drinks e refeições no componente', () => {
-    render(<App />);
+    renderWithRouterAndContext(<App />, '/');
 
     const mealIcon = screen.getByRole('img', {
       name: /meal icon/i,
@@ -21,24 +20,35 @@ describe('Componente Footer', () => {
     expect(drinksIcon).toBeInTheDocument();
   });
 
-  it('Os ícones de drinks e refeições no componente levam para suas respectivas páginas', async () => {
-    const history = createMemoryHistory();
-    render(
-      <Router history={ history }>
-        <App />
-      </Router>,
-    );
+  it('O ícone de meals no componente leva para suas respectivas páginas', async () => {
+    const { history } = renderWithRouterAndContext(<App />, '/drinks');
 
-    const mealBtn = screen.getByTestId('meals-bottom-btn');
+    const mealBtn = await screen.getByRole('img', {
+      name: /meal icon/i,
+    });
 
     userEvent.click(mealBtn);
 
-    expect(history.location.pathname).toBe('/meals');
+    await waitFor(() => expect(history.location.pathname).toEqual('/meals'));
 
-    const drinksBtn = screen.getByTestId('drinks-bottom-btn');
+    const drinksBtn = await screen.getByRole('img', {
+      name: /drink icon/i,
+    });
 
     userEvent.click(drinksBtn);
 
-    expect(history.location.pathname).toBe('/drinks');
+    await waitFor(() => expect(history.location.pathname).toEqual('/drinks'));
+  });
+
+  it('O ícone de drinks no componente leva para suas respectivas páginas', async () => {
+    const { history } = renderWithRouterAndContext(<App />, '/meals');
+
+    const drinksBtn = await screen.getByRole('img', {
+      name: /drink icon/i,
+    });
+
+    userEvent.click(drinksBtn);
+
+    await waitFor(() => expect(history.location.pathname).toEqual('/drinks'));
   });
 });
