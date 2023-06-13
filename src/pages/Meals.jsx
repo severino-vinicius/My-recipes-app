@@ -1,15 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Header from '../components/Header';
 import MealIcon from '../images/mealIcon.svg';
-import RecipesContext from '../context/recipesContext';
+// import RecipesContext from '../context/recipesContext';
 import './Meals.css';
 import Footer from '../components/Footer';
 import Recipes from './Recipes';
 
-const MAX_DRINKS_ON_PAGE = 12;
-
 export default function Meals() {
-  const { recipes } = useContext(RecipesContext);
+  // const { recipes } = useContext(RecipesContext);
 
   return (
     <>
