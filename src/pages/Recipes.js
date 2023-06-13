@@ -62,9 +62,9 @@ export default function Recipes() {
 
   const receipeDetails = (rec) => {
     if (history.location.pathname === '/drinks') {
-      history.push(`./drinks/${rec}`);
+      history.push(`/drinks/${rec}`);
     } else {
-      history.push(`./meals/${rec}`);
+      history.push(`/meals/${rec}`);
     }
   };
 
