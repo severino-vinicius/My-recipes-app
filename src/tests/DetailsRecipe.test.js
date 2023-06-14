@@ -1,5 +1,5 @@
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
+// import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouterAndContext from './helpers/RenderWithRouter';
 import fetch from '../../cypress/mocks/fetch';
