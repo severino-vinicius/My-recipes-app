@@ -36,7 +36,6 @@ export default function DoneRecipes() {
         <button data-testid="filter-by-meal-btn">Meals</button>
         <button data-testid="filter-by-drink-btn">Drinks</button>
       </div>
-
       {responseLS
         .filter((recipe) => recipe.type === 'meal')
         .map((recipe, index) => (
