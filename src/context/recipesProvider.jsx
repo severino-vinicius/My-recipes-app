@@ -97,7 +97,8 @@ function RecipesProvider({ children }) {
     fetchMealRecipes,
     fetchDrinkRecipes,
     recipes,
-  }), [fetchMealRecipes, fetchDrinkRecipes, recipes]);
+    setRecipes,
+  }), [fetchMealRecipes, fetchDrinkRecipes, recipes, setRecipes]);
 
   return (
     <RecipesContext.Provider value={ context }>

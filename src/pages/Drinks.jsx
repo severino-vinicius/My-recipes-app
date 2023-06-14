@@ -3,12 +3,9 @@ import Header from '../components/Header';
 import DrinkIcon from '../images/drinkIcon.svg';
 import Footer from '../components/Footer';
 import './Drinks.css';
-// import RecipesContext from '../context/recipesContext';
 import Recipes from './Recipes';
 
 export default function Drinks() {
-  // const { recipes } = useContext(RecipesContext);
-
   return (
     <>
       <Header
@@ -19,21 +16,7 @@ export default function Drinks() {
         pageType="drinks"
       />
       <div>Drinks</div>
-      {/* {recipes?.map((recipe, index) => {
-        if (index >= MAX_DRINKS_ON_PAGE) {
-          return null;
-        }
-        return (
-          <div className="drinkCard" key={ index } data-testid={ `${index}-recipe-card` }>
-            <img
-              src={ recipe.strDrinkThumb }
-              alt={ recipe.strDrink }
-              data-testid={ `${index}-card-img` }
-            />
-            <p data-testid={ `${index}-card-name` }>{recipe.strDrink}</p>
-          </div>
-        );
-      })} */}
+
       <Recipes />
       <Footer />
     </>

@@ -3,8 +3,10 @@ import { render } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
-function renderWithRouterAndContext(component, path = '/') {
-  const history = createMemoryHistory({ initialEntries: [path] });
+function renderWithRouterAndContext(component, path = '/', history) {
+  if (!history) {
+    history = createMemoryHistory({ initialEntries: [path] });
+  }
 
   return {
     ...render(

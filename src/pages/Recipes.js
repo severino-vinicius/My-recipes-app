@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { fetchDrinks, fetchMeals } from '../services/fetchApi';
+import RecipesContext from '../context/recipesContext';
 
 const MAX_RECIPES_ON_PAGE = 12;
 const MAX_CATEGORIES_ON_PAGE = 5;
 
 export default function Recipes() {
-  const [recipes, setRecipes] = useState([]);
+  // recipes precisa vir do context para poder ser acessado pelos outros componentes tambem(exemplo:searchBar)
+  const { recipes, setRecipes } = useContext(RecipesContext);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filterActive, setFilterActive] = useState(false);
@@ -27,7 +29,7 @@ export default function Recipes() {
       }
     };
     callFetch();
-  }, [history.location.pathname]);
+  }, [history.location.pathname, setRecipes]);
 
   const allRecipes = async () => {
     if (history.location.pathname === '/meals') {
@@ -71,7 +73,7 @@ export default function Recipes() {
   return (
     <div>
       <button data-testid="All-category-filter" onClick={ allRecipes }>All</button>
-      {categories.map((categoryName, index) => {
+      {categories?.map((categoryName, index) => {
         if (index >= MAX_CATEGORIES_ON_PAGE) {
           return null;
         }
@@ -87,7 +89,7 @@ export default function Recipes() {
         );
       })}
 
-      {recipes.map((recipe, index) => {
+      {recipes?.map((recipe, index) => {
         if (index >= MAX_RECIPES_ON_PAGE) {
           return null;
         }
