@@ -1,63 +1,116 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 
 export default function DoneRecipes() {
   const [responseLS, setResponseLS] = useState([]);
-
-  const getLocalStorage = () => {
-    const recive = JSON.parse(localStorage.getItem('doneRecipes'));
-    setResponseLS(recive);
-  };
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
+  const [shareBtn, setShareBtn] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
-    const objeto = [
-      {
-        id: 'id-da-receita',
-        type: 'meal',
-        nationality: 'nacionalidade-da-receita-ou-texto-vazio',
-        category: 'categoria-da-receita-ou-texto-vazio',
-        alcoholicOrNot: 'alcoholic-ou-non-alcoholic-ou-texto-vazio',
-        name: 'nome-da-receita',
-        image: 'imagem-da-receita',
-        doneDate: 'quando-a-receita-foi-concluida',
-        tags: 'array-de-tags-da-receita-ou-array-vazio',
-      },
-    ];
-    localStorage.setItem('doneRecipes', JSON.stringify(objeto));
-    getLocalStorage();
+    const recive = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+    if (!recive) localStorage.setItem('doneRecipes', JSON.stringify(objeto));
+    setResponseLS(recive);
+    setFilteredRecipes(recive);
   }, []);
+
+  const filterRecipes = (type) => {
+    if (type === 'Meals') {
+      const filtered = responseLS.filter((recipe) => recipe.type === 'meal');
+      setFilteredRecipes(filtered);
+    } else if (type === 'Drinks') {
+      const filtered = responseLS.filter((recipe) => recipe.type === 'drink');
+      setFilteredRecipes(filtered);
+    } else {
+      setFilteredRecipes(responseLS);
+    }
+  };
+
+  const handleShare = (type, id) => {
+    const timeOut = 2000;
+    if (type === 'meal') {
+      const pathUrl = `${window.location.origin}/meals/${id}`;
+      navigator.clipboard.writeText(pathUrl);
+      setShareBtn(true);
+      setTimeout(() => {
+        setShareBtn(false);
+      }, timeOut);
+    } if (type === 'drink') {
+      const pathUrl = `${window.location.origin}/drinks/${id}`;
+      navigator.clipboard.writeText(pathUrl);
+      setShareBtn(true);
+      setTimeout(() => {
+        setShareBtn(false);
+      }, timeOut);
+    }
+  };
+
+  const recipeDetails = (type, id) => {
+    if (type === 'drink') {
+      history.push(`/drinks/${id}`);
+    } else {
+      history.push(`/meals/${id}`);
+    }
+  };
 
   return (
     <>
       <Header pageTitle="Done Recipes" showSearch={ false } showIcon />
       <div>
-        <button data-testid="filter-by-all-btn">All</button>
-        <button data-testid="filter-by-meal-btn">Meals</button>
-        <button data-testid="filter-by-drink-btn">Drinks</button>
+        <button data-testid="filter-by-all-btn" onClick={ () => filterRecipes('All') }>
+          All
+        </button>
+        <button data-testid="filter-by-meal-btn" onClick={ () => filterRecipes('Meals') }>
+          Meals
+        </button>
+        <button
+          data-testid="filter-by-drink-btn"
+          onClick={ () => filterRecipes('Drinks') }
+        >
+          Drinks
+        </button>
       </div>
-      {responseLS
-        .filter((recipe) => recipe.type === 'meal')
-        .map((recipe, index) => (
-          <div key={ recipe.id }>
+
+      {filteredRecipes.map((recipe, index) => (
+        <div key={ recipe.id }>
+          <button type="button" onClick={ () => recipeDetails(recipe.type, recipe.id) }>
             <img
               data-testid={ `${index}-horizontal-image` }
-              src="recipe-image.jpg"
+              src={ recipe.image }
+              width={ 250 }
+              height={ 200 }
               alt="Recipe"
             />
-            <p data-testid={ `${index}-horizontal-top-text` }>
-              {recipe.category}
-              -
-              {recipe.nationality}
-            </p>
+          </button>
+          <p data-testid={ `${index}-horizontal-top-text` }>
+            {recipe.type === 'meal'
+              ? `${recipe.nationality} - ${recipe.category}`
+              : recipe.alcoholicOrNot}
+          </p>
+          <button type="button" onClick={ () => recipeDetails(recipe.type, recipe.id) }>
             <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
-            <p data-testid={ `${index}-horizontal-done-date` }>{recipe.category}</p>
-            <button data-testid={ `${index}-horizontal-share-btn` }>
-              {shareIcon}
-              Compartilhar
-            </button>
-          </div>
-        ))}
+          </button>
+          <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
+          {recipe.tags
+            .map((tag) => (
+              <p data-testid={ `${index}-${tag}-horizontal-tag` } key={ tag }>
+                {tag}
+              </p>
+            ))
+            .slice(0, 2)}
+
+          <button
+            data-testid={ `${index}-horizontal-share-btn` }
+            src={ shareIcon }
+            onClick={ () => handleShare(recipe.type, recipe.id) }
+          >
+            <img alt="shareBTn" src={ shareIcon } />
+          </button>
+          { shareBtn && <span>Link copied!</span> }
+        </div>
+      ))}
     </>
   );
 }
