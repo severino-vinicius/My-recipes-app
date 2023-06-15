@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import clipboardCopy from 'clipboard-copy';
 
 import BtnStartRecipe from './BtnStartRecipe';
 import ShareIcon from '../images/shareIcon.svg';
@@ -11,7 +10,7 @@ import { fetchMealsDetails, fetchDrinksDetails,
   fetchDrinks, fetchMeals } from '../services/fetchApi';
 
 function RecipeDetails() {
-  const [responseMealApi, setResponseMealApi] = useState(''); // Estado que salva a resposta da API
+  const [responseMealApi, setResponseMealApi] = useState([]); // Estado que salva a resposta da API
   const [responseDrinksApi, setResponseDrinksApi] = useState(''); // Estado que salva a resposta da API
   const [recomendedDrinks, setRecomendedDrinks] = useState(''); // Estado que salva a resposta da API
   const [recomendedMeals, setRecomendedMeals] = useState(''); // Estado que salva a resposta da API
@@ -32,11 +31,13 @@ function RecipeDetails() {
       setRecomendedDrinks(recomendedDrinksApi);
       return;
     }
+    if (prefix === 'drinks') {
     // Caso seja o prefixo Drinks faz as seguintes chamadas pra API
-    const drinkData = await fetchDrinksDetails(id);
-    const recomendedMealsApi = await fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-    setResponseDrinksApi(drinkData);
-    setRecomendedMeals(recomendedMealsApi);
+      const drinkData = await fetchDrinksDetails(id);
+      const recomendedMealsApi = await fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      setResponseDrinksApi(drinkData);
+      setRecomendedMeals(recomendedMealsApi);
+    }
   };
 
   const getLocalStorage = () => { // Verifica o LocalStorage e o define como um estado local
@@ -91,7 +92,8 @@ function RecipeDetails() {
   const handleShare = () => {
     const timeOut = 2000;
     const pathUrl = window.location.href;
-    clipboardCopy(pathUrl); // Ultiliza o clipBoard pra salvar o pathUrl no Ctrol + c
+    // clipboardCopy(pathUrl); // Ultiliza o clipBoard pra salvar o pathUrl no Ctrol + c
+    navigator.clipboard.writeText(pathUrl);
     setShareBtn(true); // Seta o estado shareBtn para true assim a renderização condicional do span
     setTimeout(() => { // passa a ser executada, depois de 2 segundos é setado pra false novamente para o Span sumir
       setShareBtn(false);
@@ -131,7 +133,7 @@ function RecipeDetails() {
   let recipeContent = null;
   let recomendedCards = null;
   // Renderização condicional, se possuir alguma coisa no estado responseMealApi rendeiza o map dos Meals
-  if (responseMealApi.length > 0) {
+  if (responseMealApi?.length > 0) {
     recipeContent = responseMealApi.map((meal) => (
       <div key={ meal.idMeal }>
         <img
@@ -174,7 +176,7 @@ function RecipeDetails() {
           </h4>
         </div>
       ));
-  } else if (responseDrinksApi.length > 0) {
+  } else if (responseDrinksApi?.length > 0) {
     recipeContent = responseDrinksApi.map((drink) => (
       <div key={ drink.idDrink }>
         <img
