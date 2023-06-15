@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import clipboardCopy from 'clipboard-copy';
 
 import BtnStartRecipe from './BtnStartRecipe';
 import ShareIcon from '../images/shareIcon.svg';
@@ -93,7 +92,8 @@ function RecipeDetails() {
   const handleShare = () => {
     const timeOut = 2000;
     const pathUrl = window.location.href;
-    clipboardCopy(pathUrl); // Ultiliza o clipBoard pra salvar o pathUrl no Ctrol + c
+    // clipboardCopy(pathUrl); // Ultiliza o clipBoard pra salvar o pathUrl no Ctrol + c
+    navigator.clipboard.writeText(pathUrl);
     setShareBtn(true); // Seta o estado shareBtn para true assim a renderização condicional do span
     setTimeout(() => { // passa a ser executada, depois de 2 segundos é setado pra false novamente para o Span sumir
       setShareBtn(false);
