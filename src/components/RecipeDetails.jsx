@@ -1,23 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import BtnStartRecipe from './BtnStartRecipe';
 import ShareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
+
 import '../css/Details.css';
 import { fetchMealsDetails, fetchDrinksDetails,
   fetchDrinks, fetchMeals } from '../services/fetchApi';
+import FavoriteRecipeBtn from './FavoriteRecipeBtn';
 
 function RecipeDetails() {
   const [responseMealApi, setResponseMealApi] = useState([]); // Estado que salva a resposta da API
   const [responseDrinksApi, setResponseDrinksApi] = useState(''); // Estado que salva a resposta da API
   const [recomendedDrinks, setRecomendedDrinks] = useState(''); // Estado que salva a resposta da API
   const [recomendedMeals, setRecomendedMeals] = useState(''); // Estado que salva a resposta da API
-  const [doneRecipe, setDoneRecipe] = useState(''); // Estado que salva as informações do LocalStorage
   const [inProgressRecipe, setInProgressRecipe] = useState(''); // Estado que salva as informações do LocalStorage
   const [shareBtn, setShareBtn] = useState(''); // Estado que trabalha com a mensagem do clipBoard
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isRecipeDone, setIsRecipeDone] = useState(false);
   const history = useHistory();
 
   const getDetailsData = async () => { // Função que chama a Api de acordo com qual path ela se encontra e depois salva no estado local
@@ -41,25 +39,23 @@ function RecipeDetails() {
   };
 
   const getLocalStorage = () => { // Verifica o LocalStorage e o define como um estado local
-    const dataDoneRecipeLS = JSON.parse(localStorage.getItem('doneRecipes'));
     const dataInProgressRecipeLS = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setDoneRecipe(dataDoneRecipeLS);
     setInProgressRecipe(dataInProgressRecipeLS);
   };
 
-  const verifyIsfavorite = () => { // Verifica se no LocalStorage a Receita se encontra como favorita
-    const dataLocalStorage = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+  const verifyRecipeDone = () => { // Verifica se no LocalStorage a Receita se encontra como favorita
+    const dataLocalStorage = JSON.parse(localStorage.getItem('doneRecipes')) || [];
     const pathUrl = history.location.pathname;
     const [,, id] = pathUrl.split('/');
 
     const verifyIds = dataLocalStorage.some((recipe) => recipe.id === id);
-    setIsFavorite(verifyIds);
+    setIsRecipeDone(verifyIds);
   };
 
   useEffect(() => { // Inicia o componente chamando a função q dispara a chamada da API
     getDetailsData();
     getLocalStorage();
-    verifyIsfavorite();
+    verifyRecipeDone();
   }, []);
 
   const renderIngredients = (ingredientList) => { // Função que faz uma contagem ate 20 para renderizar todos os ingredientes
@@ -70,9 +66,9 @@ function RecipeDetails() {
       const measureKey = `strMeasure${i}`;
       if (ingredientList[0][ingredientKey]) {
         ingredients.push(
-          <li key={ i } data-testid={ `${i - 1}-ingredient-name-and-measure` }>
+          <p key={ i } data-testid={ `${i - 1}-ingredient-name-and-measure` }>
             {`${ingredientList[0][ingredientKey]} ${ingredientList[0][measureKey]}`}
-          </li>,
+          </p>,
         );
       }
     }
@@ -100,33 +96,11 @@ function RecipeDetails() {
     }, timeOut);
   };
 
-  const handleFavorite = () => { // Executada ao clicar no botão favorito
-    const dataLocalStorage = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-    const pathUrl = history.location.pathname;
-    const [, prefix, id] = pathUrl.split('/'); // Pega o pathName e desestrutura para usar suas consts
-
-    const favorite = { // Objeto com ternario dependendo do prefixo o qual vem a pagina
-      id: prefix === 'meals' ? responseMealApi[0].idMeal : responseDrinksApi[0].idDrink,
-      type: prefix === 'meals' ? 'meal' : 'drink',
-      nationality: prefix === 'meals' ? responseMealApi[0].strArea : '',
-      category: prefix === 'meals' ? responseMealApi[0].strCategory
-        : responseDrinksApi[0].strCategory,
-      alcoholicOrNot: prefix === 'drinks' ? responseDrinksApi[0].strAlcoholic : '',
-      name: prefix === 'drinks' ? responseDrinksApi[0].strDrink
-        : responseMealApi[0].strMeal,
-      image: prefix === 'drinks' ? responseDrinksApi[0].strDrinkThumb
-        : responseMealApi[0].strMealThumb,
-    };
-
-    const verifyIds = dataLocalStorage.some((recipe) => recipe.id === id); // Verifica se o Id ja existe no local storage
-    if (verifyIds) {
-      const removeFavorite = dataLocalStorage.filter((recipe) => recipe.id !== id); // Se existir remove o mesmo
-      localStorage.setItem('favoriteRecipes', JSON.stringify(removeFavorite));
-      setIsFavorite(false); // seta o estado que controla o coração do favorito pra falso
+  const handleClickCard = (type, id) => {
+    if (type === 'drink') {
+      history.push(`/drinks/${id}`);
     } else {
-      const addFavorite = [...dataLocalStorage, favorite];
-      localStorage.setItem('favoriteRecipes', JSON.stringify(addFavorite)); // Se não existir adiciona um novo
-      setIsFavorite(true); // seta o estado que controla o coração do favorito pra true
+      history.push(`/meals/${id}`);
     }
   };
 
@@ -135,7 +109,7 @@ function RecipeDetails() {
   // Renderização condicional, se possuir alguma coisa no estado responseMealApi rendeiza o map dos Meals
   if (responseMealApi?.length > 0) {
     recipeContent = responseMealApi.map((meal) => (
-      <div key={ meal.idMeal }>
+      <div key={ meal.idMeal } className="details-content">
         <img
           className="imgRecipeDetail"
           data-testid="recipe-photo"
@@ -143,11 +117,34 @@ function RecipeDetails() {
           alt={ meal.strMeal }
         />
         <h4 data-testid="recipe-title">{meal.strMeal}</h4>
+        <div className="share-and-favorite">
+          { shareBtn && <span>Link copied!</span> }
+          <button
+            type="button"
+            data-testid="share-btn"
+            onClick={ handleShare }
+          >
+            <img
+              src={ ShareIcon }
+              alt="share-btn"
+            />
+          </button>
+          <FavoriteRecipeBtn
+            responseDrinksApi={ responseDrinksApi }
+            responseMealApi={ responseMealApi }
+          />
+        </div>
         <p data-testid="recipe-category">{meal.strCategory}</p>
-        <ul>{renderIngredients(responseMealApi)}</ul>
-        <p data-testid="instructions">{meal.strInstructions}</p>
+        <h4>Ingredient</h4>
+        <div className="detail-ingredient">
+          {renderIngredients(responseMealApi)}
+        </div>
+        <h4>Intructions</h4>
+        <div className="detail-instruction">
+          <p data-testid="instructions">{meal.strInstructions}</p>
+        </div>
         <iframe
-          width="560"
+          width="350"
           height="315"
           src={ embedVideo(meal.strYoutube) }
           title="YouTube video player"
@@ -158,13 +155,14 @@ function RecipeDetails() {
         />
       </div>
     ));
-
     recomendedCards = recomendedDrinks
       .filter(filterRecomendedCard)
       .map((recipe, index) => (
-        <div
+        <button
+          type="button"
           key={ recipe.idDrink }
           data-testid={ `${index}-recommendation-card` }
+          onClick={ () => handleClickCard('drink', recipe.idDrink) }
         >
           <img
             className="imgRecomendCard"
@@ -174,30 +172,55 @@ function RecipeDetails() {
           <h4 data-testid={ `${index}-recommendation-title` }>
             {recipe.strDrink}
           </h4>
-        </div>
+        </button>
       ));
   } else if (responseDrinksApi?.length > 0) {
     recipeContent = responseDrinksApi.map((drink) => (
-      <div key={ drink.idDrink }>
+      <div key={ drink.idDrink } className="details-content">
         <img
           className="imgRecipeDetail"
           data-testid="recipe-photo"
           src={ drink.strDrinkThumb }
           alt={ drink.strDrink }
         />
-        <h4 data-testid="recipe-title">{drink.strDrink}</h4>
+        <div>
+          <h4 data-testid="recipe-title">{drink.strDrink}</h4>
+          <div className="share-and-favorite">
+            { shareBtn && <span>Link copied!</span> }
+            <button
+              type="button"
+              data-testid="share-btn"
+              onClick={ handleShare }
+            >
+              <img
+                src={ ShareIcon }
+                alt="share-btn"
+              />
+            </button>
+            <FavoriteRecipeBtn
+              responseDrinksApi={ responseDrinksApi }
+              responseMealApi={ responseMealApi }
+            />
+          </div>
+        </div>
         <p data-testid="recipe-category">{drink.strAlcoholic}</p>
-        <ul>{renderIngredients(responseDrinksApi)}</ul>
-        <p data-testid="instructions">{drink.strInstructions}</p>
+        <h4>Ingredient</h4>
+        <div className="detail-ingredient">
+          {renderIngredients(responseDrinksApi)}
+        </div>
+        <div className="detail-instruction">
+          <p data-testid="instructions">{drink.strInstructions}</p>
+        </div>
       </div>
     ));
-
     recomendedCards = recomendedMeals
       .filter(filterRecomendedCard)
       .map((recipe, index) => (
-        <div
+        <button
+          type="button"
           key={ recipe.idMeal }
           data-testid={ `${index}-recommendation-card` }
+          onClick={ () => handleClickCard('meal', recipe.idMeal) }
         >
           <img
             className="imgRecomendCard"
@@ -207,40 +230,18 @@ function RecipeDetails() {
           <h4 data-testid={ `${index}-recommendation-title` }>
             {recipe.strMeal}
           </h4>
-        </div>
+        </button>
       ));
   }
-
   return (
-    <>
-      <div>
-        {recipeContent}
-        <div className="RecomendedCard">{recomendedCards}</div>
-        {!doneRecipe && <BtnStartRecipe inProgressRecipe={ inProgressRecipe } />}
+    <section className="recipe-datail-container">
+
+      {recipeContent}
+      <div className="carousel-container">
+        <div className="carousel-card">{recomendedCards}</div>
       </div>
-      <button
-        type="button"
-        data-testid="share-btn"
-        onClick={ handleShare }
-      >
-        <img
-          src={ ShareIcon }
-          alt="share-btn"
-        />
-      </button>
-      <button
-        type="button"
-        data-testid="favorite-btn"
-        onClick={ handleFavorite }
-        src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
-      >
-        <img
-          src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
-          alt="share-btn"
-        />
-      </button>
-      { shareBtn && <span>Link copied!</span> }
-    </>
+      {!isRecipeDone && <BtnStartRecipe inProgressRecipe={ inProgressRecipe } />}
+    </section>
   );
 }
 

@@ -3,9 +3,8 @@ import RecipeDetails from '../components/RecipeDetails';
 
 export default function DrinksDetails() {
   return (
-    <>
-      DrinksDetails
+    <div className="details-page">
       <RecipeDetails />
-    </>
+    </div>
   );
 }
