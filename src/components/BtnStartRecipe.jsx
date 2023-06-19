@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import '../css/StartRecipeBtn.css';
 
 export default function BtnStartRecipe({ inProgressRecipe }) {
   const history = useHistory();

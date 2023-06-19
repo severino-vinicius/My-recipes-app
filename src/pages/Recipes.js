@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { fetchDrinks, fetchMeals } from '../services/fetchApi';
 import RecipesContext from '../context/recipesContext';
+import '../css/Recipe.css';
 
 const MAX_RECIPES_ON_PAGE = 12;
 const MAX_CATEGORIES_ON_PAGE = 5;
@@ -72,53 +73,69 @@ export default function Recipes() {
 
   return (
     <div>
-      <button data-testid="All-category-filter" onClick={ allRecipes }>All</button>
-      {categories?.map((categoryName, index) => {
-        if (index >= MAX_CATEGORIES_ON_PAGE) {
-          return null;
-        }
-        return (
-          <div key={ index }>
-            <button
-              onClick={ () => whatCategory(categoryName.strCategory) }
-              data-testid={ `${categoryName.strCategory}-category-filter` }
-            >
-              {categoryName.strCategory}
-            </button>
-          </div>
-        );
-      })}
+      <div className="category-conteiner">
+        <button
+          className="category-btn"
+          data-testid="All-category-filter"
+          onClick={ allRecipes }
+        >
+          All
+        </button>
+        {categories?.map((categoryName, index) => {
+          if (index >= MAX_CATEGORIES_ON_PAGE) {
+            return null;
+          }
+          return (
+            <div key={ index }>
+              <button
+                className="category-btn"
+                onClick={ () => whatCategory(categoryName.strCategory) }
+                data-testid={ `${categoryName.strCategory}-category-filter` }
+              >
+                {categoryName.strCategory}
+              </button>
+            </div>
+          );
+        })}
+      </div>
 
-      {recipes?.map((recipe, index) => {
-        if (index >= MAX_RECIPES_ON_PAGE) {
-          return null;
-        }
-        return (
-          <div key={ index } data-testid={ `${index}-recipe-card` }>
-            <p
-              data-testid={ `${index}-card-name` }
+      <div className="recipe-list">
+        {recipes?.map((recipe, index) => {
+          if (index >= MAX_RECIPES_ON_PAGE) {
+            return null;
+          }
+          return (
+            <div
+              key={ index }
+              data-testid={ `${index}-recipe-card` }
+              className="recipeCard"
             >
-              {history.location.pathname === '/drinks'
-                ? recipe.strDrink : recipe.strMeal}
+              <p
+                data-testid={ `${index}-card-name` }
+                className="recipe-title"
+              >
+                {history.location.pathname === '/drinks'
+                  ? recipe.strDrink : recipe.strMeal}
 
-            </p>
-            <button
-              onClick={ history.location.pathname === '/drinks'
-                ? () => receipeDetails(recipe.idDrink)
-                : () => receipeDetails(recipe.idMeal) }
-            >
-              <img
-                data-testid={ `${index}-card-img` }
-                alt={ history.location.pathname === '/drinks'
-                  ? recipe.strstrDrink : recipe.strMeal }
-                src={ history.location.pathname === '/drinks'
-                  ? recipe.strDrinkThumb : recipe.strMealThumb }
-              />
-            </button>
-          </div>
-        );
-      })}
-
+              </p>
+              <button
+                className="img-to-details"
+                onClick={ history.location.pathname === '/drinks'
+                  ? () => receipeDetails(recipe.idDrink)
+                  : () => receipeDetails(recipe.idMeal) }
+              >
+                <img
+                  data-testid={ `${index}-card-img` }
+                  alt={ history.location.pathname === '/drinks'
+                    ? recipe.strstrDrink : recipe.strMeal }
+                  src={ history.location.pathname === '/drinks'
+                    ? recipe.strDrinkThumb : recipe.strMealThumb }
+                />
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
