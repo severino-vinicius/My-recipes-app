@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import '../css/RecipeInProgress.css';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function RecipeInProgress() {
   const { id } = useParams();
@@ -142,7 +146,7 @@ function RecipeInProgress() {
     }
   };
   const redirectToDoneRecipes = () => {
-    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+    let doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
     const [tag1, tag2] = recipe.tags ? recipe.tags.split(',') : ['', ''];
     const newDoneRecipe = {
       id,
@@ -155,8 +159,12 @@ function RecipeInProgress() {
       type: page.includes('/meals') ? 'meal' : 'drink',
       doneDate: new Date().toISOString(),
     };
-    const isRecipeAlreadyDone = doneRecipes
-      .some((recipe04) => recipe04.id === newDoneRecipe.id);
+
+    if (!Array.isArray(doneRecipes)) {
+      doneRecipes = [];
+    }
+
+    const isRecipeAlreadyDone = doneRecipes.some((recipe04) => recipe04.id === newDoneRecipe.id);
     if (!isRecipeAlreadyDone) {
       const updatedDoneRecipes = [...doneRecipes, newDoneRecipe];
       localStorage.setItem('doneRecipes', JSON.stringify(updatedDoneRecipes));
@@ -178,69 +186,79 @@ function RecipeInProgress() {
     checkAllIngredients();
   }, [completedIngredients]);
   return (
-    <div>
-      <h3 data-testid="recipe-title">{recipe.name}</h3>
-      <img
-        data-testid="recipe-photo"
-        src={ recipe.image }
-        alt="Imagem do prato pronto"
-      />
-      <button
-        data-testid="share-btn"
-        type="button"
-        onClick={ handleShare }
-      >
-        Compartilhar
-      </button>
-      <button
-        data-testid="favorite-btn"
-        type="button"
-        onClick={ handleFavorite }
-        src={ isFavorite ? 'blackHeartIcon' : 'whiteHeartIcon' }
-      >
-        {isFavorite ? 'Desfavoritar' : 'Favoritar'}
-      </button>
-      <p data-testid="recipe-category">{recipe.category}</p>
-      <div>
-        Ingredientes:
-        {recipe.ingredients.map((ingredient, index) => (
-          <div key={ index }>
-            <label
-              htmlFor={ ingredient }
-              data-testid={ `${index}-ingredient-step` }
-              style={ {
-                textDecoration: completedIngredients.includes(ingredient)
-                  ? 'line-through'
-                  : 'none',
-                color: completedIngredients.includes(ingredient)
-                  ? 'rgb(0, 0, 0)'
-                  : 'inherit',
-              } }
-            >
-              {ingredient}
+    <div className="recipe-datail-container">
+      <div className="details-content ">
+        <img
+          className="imgRecipeDetail"
+          data-testid="recipe-photo"
+          src={ recipe.image }
+          alt="Imagem do prato pronto"
+        />
+        <h3 data-testid="recipe-title">{recipe.name}</h3>
+        <button
+          className="in_progress_btn"
+          data-testid="share-btn"
+          type="button"
+          onClick={ handleShare }
+        >
+          <img alt="shareBTn" src={ shareIcon } />
+        </button>
+        <button
+          className="in_progress_btn"
+          data-testid="favorite-btn"
+          type="button"
+          onClick={ handleFavorite }
+          src={ isFavorite ? 'blackHeartIcon' : 'whiteHeartIcon' }
+        >
+          <img src={ isFavorite ? whiteHeartIcon : blackHeartIcon } alt="" />
+        </button>
+        <p data-testid="recipe-category">{recipe.category}</p>
+        <div className="">
+          Ingredients:
+          <div className="ingredients_checkbox_container" />
+          {recipe.ingredients.map((ingredient, index) => (
+            <div key={ index }>
+              <label
+                className="label"
+                htmlFor={ ingredient }
+                data-testid={ `${index}-ingredient-step` }
+                style={ {
+                  textDecoration: completedIngredients.includes(ingredient)
+                    ? 'line-through'
+                    : 'none',
+                  color: completedIngredients.includes(ingredient)
+                    ? 'rgb(0, 0, 0)'
+                    : 'inherit',
+                } }
+              >
+                {ingredient}
+
+              </label>
               <input
+                className="input"
                 type="checkbox"
                 name={ ingredient }
                 id={ ingredient }
                 checked={ completedIngredients.includes(ingredient) }
                 onChange={ () => handleIngredientChange(ingredient) }
               />
-            </label>
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
+        <p className="detail-instruction" data-testid="instructions">
+          {recipe.instructions}
+        </p>
+        {isLinkCopied && <p>Link copied!</p>}
+        <button
+          className="btnStartRecipe"
+          data-testid="finish-recipe-btn"
+          type="button"
+          disabled={ !areAllIngredientsChecked }
+          onClick={ redirectToDoneRecipes }
+        >
+          Done Recipe
+        </button>
       </div>
-      <p data-testid="instructions">
-        {recipe.instructions}
-      </p>
-      {isLinkCopied && <p>Link copied!</p>}
-      <button
-        data-testid="finish-recipe-btn"
-        type="button"
-        disabled={ !areAllIngredientsChecked }
-        onClick={ redirectToDoneRecipes }
-      >
-        Finalizar Receita
-      </button>
     </div>
   );
 }

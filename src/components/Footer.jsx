@@ -15,8 +15,9 @@ function Footer() {
   };
 
   return (
-    <div className="footer" data-testid="footer">
+    <div className="footer_container" data-testid="footer">
       <button
+        className="drink"
         data-testid="drinks-bottom-btn"
         onClick={ handleDrinksClick }
         src={ drinkIcon }
@@ -25,6 +26,7 @@ function Footer() {
       </button>
 
       <button
+        className="meal"
         data-testid="meals-bottom-btn"
         onClick={ handleMealsClick }
         src={ mealIcon }

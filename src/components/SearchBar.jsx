@@ -25,8 +25,9 @@ export default function SearchBar({ pageType }) {
 
   return (
     <>
-      <div>
+      <div className="radio_container">
         <input
+          className="radio_input"
           type="radio"
           value={ searchOption }
           id="ingredient"
@@ -36,11 +37,12 @@ export default function SearchBar({ pageType }) {
           checked={ searchOption === 'ingredient' }
         />
         {' '}
-        <label htmlFor="ingredient">Ingredient </label>
+        <label htmlFor="ingredient">Ingredient</label>
         {' '}
         {'  '}
 
         <input
+          className="radio_input"
           type="radio"
           value={ searchOption }
           id="name"
@@ -50,10 +52,11 @@ export default function SearchBar({ pageType }) {
           checked={ searchOption === 'name' }
         />
         {' '}
-        <label htmlFor="name">Name </label>
+        <label htmlFor="name">Name</label>
         {'  '}
 
         <input
+          className="radio_input"
           type="radio"
           value={ searchOption }
           id="first-letter"
@@ -65,21 +68,25 @@ export default function SearchBar({ pageType }) {
         {' '}
         <label htmlFor="first-letter">First letter</label>
       </div>
-      <input
-        type="text"
-        value={ filterText }
-        onChange={ ({ target }) => setFilterText(target.value) }
-        placeholder="Search"
-        data-testid="search-input"
-      />
-      <br />
-      <br />
-      <Button
-        onClick={ handleSearch }
-        data-testid="exec-search-btn"
-      >
-        SEARCH
-      </Button>
+      <div className="input_btn_container">
+        <input
+          type="text"
+          value={ filterText }
+          onChange={ ({ target }) => setFilterText(target.value) }
+          placeholder="Search"
+          data-testid="search-input"
+        />
+        {/* <br />
+      <br /> */}
+        <button
+          type="button"
+          className="btn btn-warning"
+          onClick={ handleSearch }
+          data-testid="exec-search-btn"
+        >
+          SEARCH
+        </button>
+      </div>
     </>
   );
 }

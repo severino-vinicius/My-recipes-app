@@ -110,14 +110,16 @@ export default function Recipes() {
               data-testid={ `${index}-recipe-card` }
               className="recipeCard"
             >
-              <p
-                data-testid={ `${index}-card-name` }
-                className="recipe-title"
-              >
-                {history.location.pathname === '/drinks'
-                  ? recipe.strDrink : recipe.strMeal}
+              <div>
+                <p
+                  data-testid={ `${index}-card-name` }
+                  className="recipe-title"
+                >
+                  {history.location.pathname === '/drinks'
+                    ? recipe.strDrink : recipe.strMeal}
 
-              </p>
+                </p>
+              </div>
               <button
                 className="img-to-details"
                 onClick={ history.location.pathname === '/drinks'

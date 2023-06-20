@@ -15,7 +15,6 @@ export default function Drinks() {
         pageIcon={ DrinkIcon }
         pageType="drinks"
       />
-      <div>Drinks</div>
       <Recipes />
       <Footer />
     </div>

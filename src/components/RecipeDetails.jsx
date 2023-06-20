@@ -30,7 +30,7 @@ function RecipeDetails() {
       return;
     }
     if (prefix === 'drinks') {
-    // Caso seja o prefixo Drinks faz as seguintes chamadas pra API
+      // Caso seja o prefixo Drinks faz as seguintes chamadas pra API
       const drinkData = await fetchDrinksDetails(id);
       const recomendedMealsApi = await fetchMeals('https://www.themealdb.com/api/json/v1/1/search.php?s=');
       setResponseDrinksApi(drinkData);
@@ -38,17 +38,17 @@ function RecipeDetails() {
     }
   };
 
-  const getLocalStorage = () => { // Verifica o LocalStorage e o define como um estado local
+  const getLocalStorage = () => {
     const dataInProgressRecipeLS = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setInProgressRecipe(dataInProgressRecipeLS);
+    setInProgressRecipe(dataInProgressRecipeLS || {});
   };
 
-  const verifyRecipeDone = () => { // Verifica se no LocalStorage a Receita se encontra como favorita
+  const verifyRecipeDone = () => {
     const dataLocalStorage = JSON.parse(localStorage.getItem('doneRecipes')) || [];
     const pathUrl = history.location.pathname;
     const [,, id] = pathUrl.split('/');
 
-    const verifyIds = dataLocalStorage.some((recipe) => recipe.id === id);
+    const verifyIds = Array.isArray(dataLocalStorage) && dataLocalStorage.some((recipe) => recipe.id === id);
     setIsRecipeDone(verifyIds);
   };
 
@@ -116,23 +116,25 @@ function RecipeDetails() {
           src={ meal.strMealThumb }
           alt={ meal.strMeal }
         />
-        <h4 data-testid="recipe-title">{meal.strMeal}</h4>
-        <div className="share-and-favorite">
-          { shareBtn && <span>Link copied!</span> }
-          <button
-            type="button"
-            data-testid="share-btn"
-            onClick={ handleShare }
-          >
-            <img
-              src={ ShareIcon }
-              alt="share-btn"
+        <div>
+          <h4 className="recipe_title" data-testid="recipe-title">{meal.strMeal}</h4>
+          <div className="share-and-favorite">
+            { shareBtn && <span>Link copied!</span> }
+            <button
+              type="button"
+              data-testid="share-btn"
+              onClick={ handleShare }
+            >
+              <img
+                src={ ShareIcon }
+                alt="share-btn"
+              />
+            </button>
+            <FavoriteRecipeBtn
+              responseDrinksApi={ responseDrinksApi }
+              responseMealApi={ responseMealApi }
             />
-          </button>
-          <FavoriteRecipeBtn
-            responseDrinksApi={ responseDrinksApi }
-            responseMealApi={ responseMealApi }
-          />
+          </div>
         </div>
         <p data-testid="recipe-category">{meal.strCategory}</p>
         <h4>Ingredient</h4>
@@ -149,7 +151,7 @@ function RecipeDetails() {
           src={ embedVideo(meal.strYoutube) }
           title="YouTube video player"
           allow="accelerometer; clipboard-write;
-          encrypted-media; gyroscope; picture-in-picture; web-share"
+           encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           data-testid="video"
         />
@@ -184,7 +186,7 @@ function RecipeDetails() {
           alt={ drink.strDrink }
         />
         <div>
-          <h4 data-testid="recipe-title">{drink.strDrink}</h4>
+          <h4 className="recipe_title" data-testid="recipe-title">{drink.strDrink}</h4>
           <div className="share-and-favorite">
             { shareBtn && <span>Link copied!</span> }
             <button
