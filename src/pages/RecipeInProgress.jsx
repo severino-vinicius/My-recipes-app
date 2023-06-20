@@ -215,9 +215,9 @@ function RecipeInProgress() {
         <p data-testid="recipe-category">{recipe.category}</p>
         <div className="">
           Ingredients:
-          <div className="ingredients_checkbox_container" />
+          <div />
           {recipe.ingredients.map((ingredient, index) => (
-            <div key={ index }>
+            <div key={ index } className="ingredients_checkbox_container">
               <label
                 className="label"
                 htmlFor={ ingredient }
@@ -232,7 +232,6 @@ function RecipeInProgress() {
                 } }
               >
                 {ingredient}
-
               </label>
               <input
                 className="input"
