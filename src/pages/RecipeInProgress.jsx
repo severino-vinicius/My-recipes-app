@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faShare } from '@fortawesome/free-solid-svg-icons';
 import '../css/RecipeInProgress.css';
-import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function RecipeInProgress() {
   const { id } = useParams();
@@ -164,7 +163,8 @@ function RecipeInProgress() {
       doneRecipes = [];
     }
 
-    const isRecipeAlreadyDone = doneRecipes.some((recipe04) => recipe04.id === newDoneRecipe.id);
+    const isRecipeAlreadyDone = doneRecipes
+      .some((recipe04) => recipe04.id === newDoneRecipe.id);
     if (!isRecipeAlreadyDone) {
       const updatedDoneRecipes = [...doneRecipes, newDoneRecipe];
       localStorage.setItem('doneRecipes', JSON.stringify(updatedDoneRecipes));
@@ -195,25 +195,36 @@ function RecipeInProgress() {
           alt="Imagem do prato pronto"
         />
         <h3 data-testid="recipe-title">{recipe.name}</h3>
-        <button
-          className="in_progress_btn"
-          data-testid="share-btn"
-          type="button"
-          onClick={ handleShare }
-        >
-          <img alt="shareBTn" src={ shareIcon } />
-        </button>
-        <button
-          className="in_progress_btn"
-          data-testid="favorite-btn"
-          type="button"
-          onClick={ handleFavorite }
-          src={ isFavorite ? 'blackHeartIcon' : 'whiteHeartIcon' }
-        >
-          <img src={ isFavorite ? whiteHeartIcon : blackHeartIcon } alt="" />
-        </button>
+        <div className="share-and-favorite">
+          {isLinkCopied && <p>Link copied!</p>}
+          <button
+            data-testid="share-btn"
+            type="button"
+            onClick={ handleShare }
+          >
+            <FontAwesomeIcon icon={ faShare } />
+          </button>
+          <button
+            data-testid="favorite-btn"
+            type="button"
+            onClick={ handleFavorite }
+            src={ isFavorite ? 'blackHeartIcon' : 'whiteHeartIcon' }
+          >
+            {isFavorite
+              ? (
+                <FontAwesomeIcon
+                  icon={ faHeart }
+                  color="red"
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={ faHeart }
+                  color="gray"
+                />)}
+          </button>
+        </div>
         <p data-testid="recipe-category">{recipe.category}</p>
-        <div className="">
+        <div>
           Ingredients:
           <div />
           {recipe.ingredients.map((ingredient, index) => (
@@ -247,7 +258,6 @@ function RecipeInProgress() {
         <p className="detail-instruction" data-testid="instructions">
           {recipe.instructions}
         </p>
-        {isLinkCopied && <p>Link copied!</p>}
         <button
           className="btnStartRecipe"
           data-testid="finish-recipe-btn"

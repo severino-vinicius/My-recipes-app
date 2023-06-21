@@ -9,7 +9,7 @@ import Logo from '../images/logowhite.png';
 export default function DoneRecipes() {
   const [responseLS, setResponseLS] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
-  const [shareBtn, setShareBtn] = useState('');
+  const [shareBtn, setShareBtn] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -62,7 +62,11 @@ export default function DoneRecipes() {
     <>
       <Header pageTitle="Done Recipes" showSearch={ false } showIcon />
       <div className="category-conteiner-dr">
-        <img src={ Logo } alt="Logo-My-Chef" />
+        <img
+          src={ Logo }
+          alt="Logo-My-Chef"
+          className=""
+        />
         <button
           className="category-btn-dr"
           data-testid="filter-by-all-btn"
@@ -122,7 +126,11 @@ export default function DoneRecipes() {
                   </p>
                 ))
                 .slice(0, 2)}
-              <button type="button" className="favorite-item-remove">
+              <button
+                type="button"
+                className="favorite-item-remove"
+                onClick={ () => handleShare(recipe.type, recipe.id) }
+              >
                 <FontAwesomeIcon icon={ faShare } />
               </button>
               { shareBtn && <span>Link copied!</span> }

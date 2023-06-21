@@ -5,7 +5,7 @@
 }
 
 .details-page {
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
 }
 
 .recipe-datail-container {
@@ -78,7 +78,7 @@
 }
 
 .recipe_title {
-  text-align: center;   
+  text-align: center;
 }
 
 @keyframes carrossel {
@@ -96,20 +96,21 @@
   100% { margin-left: 0; }
 }
 
-.share-and-favorite  {
+.share-and-favorite {
   display: flex;
-  justify-content: center;
   flex-direction: row-reverse;
-  }
+  justify-content: center;
+}
 
- .share-and-favorite button {
-  border-radius: 50%;
+.share-and-favorite button {
+  background-color: white;
+  border: none;
   max-width: 40px;
   padding: 2px;
   width: 40px;
-} 
+}
 
-@media (min-width: 390px) and (max-width: 900px) {
+@media ( min-width : 390px ) and ( max-width : 900px ) {
 
   .detail-instruction {
     border: 1px solid rgb(203, 197, 197);
@@ -118,9 +119,9 @@
     padding: 20px;
   }
 
-  .share-and-favorite  {
-  display: flex;
-  justify-content: center;
+  .share-and-favorite {
+    display: flex;
+    justify-content: center;
   }
 
   .share-and-favorite button {
@@ -131,8 +132,8 @@
   }
 
   .imgRecipeDetail {
-    max-width: 100%;
     max-height: 100%;
+    max-width: 100%;
     width: 100%;
   }
 
@@ -145,12 +146,5 @@
     flex-direction: column;
     gap: 10px;
     width: 100%;
-  }
-
-  .detail-instruction {
-    border: 1px solid rgb(203, 197, 197);
-    border-radius: 4px;
-    max-width: 100%;
-    padding: 20px;
   }
 }

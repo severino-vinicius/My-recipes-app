@@ -13,12 +13,10 @@ export default function BtnStartRecipe({ inProgressRecipe }) {
     // será verificado se as chaves dos objetos drinks, meals
     // possuem o id que corresponde ao ID da url da pagina
     if (inProgressRecipe) {
-      const { drinks, meals } = inProgressRecipe;
       const pathUrl = history.location.pathname;
       const [,, id] = pathUrl.split('/');
 
-      const isRecipeInProgress = (drinks && Object.keys(drinks).includes(id))
-      || (meals && Object.keys(meals).includes(id));
+      const isRecipeInProgress = (Object.keys(inProgressRecipe).includes(id));
       setRecipeButtonText(isRecipeInProgress ? 'Continue Recipe' : 'Start Recipe');
     }
   }, [inProgressRecipe]);

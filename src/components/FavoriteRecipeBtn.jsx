@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -58,10 +60,17 @@ export default function FavoriteRecipeBtn({ responseMealApi, responseDrinksApi }
       onClick={ handleFavorite }
       src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
     >
-      <img
-        src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
-        alt="share-btn"
-      />
+      {isFavorite
+        ? (
+          <FontAwesomeIcon
+            icon={ faHeart }
+            color="red"
+          />
+        ) : (
+          <FontAwesomeIcon
+            icon={ faHeart }
+            color="gray"
+          />)}
     </button>
   );
 }

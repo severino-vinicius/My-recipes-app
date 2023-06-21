@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShare } from '@fortawesome/free-solid-svg-icons';
 import BtnStartRecipe from './BtnStartRecipe';
-import ShareIcon from '../images/shareIcon.svg';
-
 import '../css/Details.css';
 import { fetchMealsDetails, fetchDrinksDetails,
   fetchDrinks, fetchMeals } from '../services/fetchApi';
@@ -47,8 +47,8 @@ function RecipeDetails() {
     const dataLocalStorage = JSON.parse(localStorage.getItem('doneRecipes')) || [];
     const pathUrl = history.location.pathname;
     const [,, id] = pathUrl.split('/');
-
-    const verifyIds = Array.isArray(dataLocalStorage) && dataLocalStorage.some((recipe) => recipe.id === id);
+    const verifyIds = Array.isArray(dataLocalStorage)
+    && dataLocalStorage.some((recipe) => recipe.id === id);
     setIsRecipeDone(verifyIds);
   };
 
@@ -125,10 +125,7 @@ function RecipeDetails() {
               data-testid="share-btn"
               onClick={ handleShare }
             >
-              <img
-                src={ ShareIcon }
-                alt="share-btn"
-              />
+              <FontAwesomeIcon icon={ faShare } />
             </button>
             <FavoriteRecipeBtn
               responseDrinksApi={ responseDrinksApi }
@@ -194,10 +191,7 @@ function RecipeDetails() {
               data-testid="share-btn"
               onClick={ handleShare }
             >
-              <img
-                src={ ShareIcon }
-                alt="share-btn"
-              />
+              <FontAwesomeIcon icon={ faShare } />
             </button>
             <FavoriteRecipeBtn
               responseDrinksApi={ responseDrinksApi }
