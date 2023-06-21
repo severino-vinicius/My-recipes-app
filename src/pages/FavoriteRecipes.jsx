@@ -3,17 +3,36 @@ import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faShare } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
-import ShareIcon from '../images/shareIcon.svg';
 import '../css/FavoriteRecipe.css';
 
 export default function FavoriteRecipes() {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [responseLS, setResponseLS] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
     const favRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
     setFavoriteRecipes(favRecipes);
   }, []);
+
+  useEffect(() => {
+    const recive = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    if (!recive) localStorage.setItem('favoriteRecipes', JSON.stringify(objeto));
+    setResponseLS(recive);
+    setFavoriteRecipes(recive);
+  }, []);
+
+  const filterRecipes = (type) => {
+    if (type === 'Meals') {
+      const filtered = responseLS.filter((recipe) => recipe.type === 'meal');
+      setFavoriteRecipes(filtered);
+    } else if (type === 'Drinks') {
+      const filtered = responseLS.filter((recipe) => recipe.type === 'drink');
+      setFavoriteRecipes(filtered);
+    } else {
+      setFavoriteRecipes(responseLS);
+    }
+  };
 
   const removeFavorite = (removeId) => {
     const newLocalStorage = favoriteRecipes.filter((recipe) => recipe.id !== removeId);
@@ -35,9 +54,27 @@ export default function FavoriteRecipes() {
       <div className="recipe-container-favorite">
 
         <div className="category-conteiner">
-          <button type="button" className="category-btn-favorite">All</button>
-          <button type="button" className="category-btn-favorite">Food</button>
-          <button type="button" className="category-btn-favorite">Drinks</button>
+          <button
+            onClick={ () => filterRecipes('All') }
+            type="button"
+            className="category-btn-favorite"
+          >
+            All
+          </button>
+          <button
+            onClick={ () => filterRecipes('Meals') }
+            type="button"
+            className="category-btn-favorite"
+          >
+            Food
+          </button>
+          <button
+            onClick={ () => filterRecipes('Drinks') }
+            type="button"
+            className="category-btn-favorite"
+          >
+            Drinks
+          </button>
         </div>
         <div className="recipe-list-favorite">
           {favoriteRecipes.map((recipe, index) => (
