@@ -58,15 +58,21 @@ export default function DoneRecipes() {
     }
   };
 
+  const goToRecipes = () => {
+    history.push('/meals');
+  };
+
   return (
     <>
       <Header pageTitle="Done Recipes" showSearch={ false } showIcon />
       <div className="category-conteiner-dr">
-        <img
-          src={ Logo }
-          alt="Logo-My-Chef"
-          className=""
-        />
+        <button className="logo-btn" onClick={ goToRecipes }>
+          <img
+            src={ Logo }
+            alt="Logo-My-Chef"
+            className="logo-image"
+          />
+        </button>
         <button
           className="category-btn-dr"
           data-testid="filter-by-all-btn"

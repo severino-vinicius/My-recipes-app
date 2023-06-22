@@ -92,6 +92,15 @@
     gap: 10px;
   }
   
+  .logo-image { 
+    position: fixed;
+    top: 3.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    width: 100px; 
+    height: auto;
+  }
   @media ( min-width : 390px ) and ( max-width : 900px ) {
   
     .category-conteiner-dr {
@@ -168,6 +177,19 @@
       background-color: white;
       border: none;
     }
-  
+
+    .logo-image { 
+      position: fixed;
+      top: 5%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+      width: 100px; 
+      height: auto;
+    }
+
+    .logo-btn {
+      border: none;
+    }
   }
   
